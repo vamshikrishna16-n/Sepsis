@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Sepsis Prediction Simulator{% endblock %}
+
+{% block content %}
+<div class="text-center mb-12">
+    <h1 class="text-4xl md:text-6xl font-bold text-[#3D0066] mb-6">
+        Sepsis Prediction Simulator
+    </h1>
+    <p class="text-xl text-[#3D0066]/80 max-w-3xl mx-auto leading-relaxed">
+        Advanced AI-powered tool for healthcare professionals to assess sepsis risk using machine learning models trained on clinical data.
+    </p>
+</div>
+
+<!-- Features -->
+<div class="grid md:grid-cols-3 gap-8 mb-12">
+    <div class="bg-white p-6 rounded-2xl shadow-2xl border border-[#3D0066]/10" style="box-shadow: 0 8px 24px 0 #3D006633;">
+        <div class="text-[#3D0066] mb-4">
+            <svg class="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2 text-[#3D0066]">AI-Powered Analysis</h3>
+        <p class="text-[#3D0066]/80">Advanced CNN-LSTM neural network trained on clinical data to provide accurate sepsis risk assessments.</p>
+    </div>
+    
+    <div class="bg-white p-6 rounded-2xl shadow-2xl border border-[#3D0066]/10" style="box-shadow: 0 8px 24px 0 #3D006633;">
+        <div class="text-[#6C2EB7] mb-4">
+            <svg class="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+            </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2 text-[#3D0066]">Secure & Private</h3>
+        <p class="text-[#3D0066]/80">HIPAA-compliant platform with secure authentication and encrypted data storage for healthcare professionals.</p>
+    </div>
+    
+    <div class="bg-white p-6 rounded-2xl shadow-2xl border border-[#3D0066]/10" style="box-shadow: 0 8px 24px 0 #3D006633;">
+        <div class="text-[#A259FF] mb-4">
+            <svg class="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2 text-[#3D0066]">Real-time Monitoring</h3>
+        <p class="text-[#3D0066]/80">Track patient trends over time with interactive charts and comprehensive vital sign analysis.</p>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="text-center">
+    {% if current_user.is_authenticated %}
+        <a href="{{ url_for('dashboard') }}" class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#3D0066] hover:bg-[#2a0047] md:py-4 md:text-lg md:px-10 transition-all duration-200 shadow-lg">
+            Go to Dashboard
+        </a>
+    {% else %}
+        <div class="space-x-4">
+            <a href="{{ url_for('register') }}" class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#3D0066] hover:bg-[#2a0047] md:py-4 md:text-lg md:px-10 transition-all duration-200 shadow-lg">
+                Get Started
+            </a>
+            <a href="{{ url_for('login') }}" class="inline-flex items-center px-8 py-3 border border-[#3D0066] text-base font-medium rounded-md text-[#3D0066] bg-white hover:bg-[#f6f2fa] md:py-4 md:text-lg md:px-10 transition-all duration-200 shadow-lg">
+                Sign In
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<!-- How it Works -->
+<div class="mt-16">
+    <h2 class="text-3xl font-bold text-center mb-8 text-[#3D0066]">How It Works</h2>
+    <div class="grid md:grid-cols-4 gap-6">
+        <div class="text-center">
+            <div class="bg-[#f6f2fa] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg" style="box-shadow: 0 4px 16px 0 #3D006622;">
+                <span class="text-2xl font-bold text-[#3D0066]">1</span>
+            </div>
+            <h3 class="font-semibold mb-2 text-[#3D0066]">Register</h3>
+            <p class="text-[#3D0066]/80 text-sm">Create your secure healthcare professional account</p>
+        </div>
+        <div class="text-center">
+            <div class="bg-[#f6f2fa] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg" style="box-shadow: 0 4px 16px 0 #3D006622;">
+                <span class="text-2xl font-bold text-[#3D0066]">2</span>
+            </div>
+            <h3 class="font-semibold mb-2 text-[#3D0066]">Add Patients</h3>
+            <p class="text-[#3D0066]/80 text-sm">Register your patients with basic information</p>
+        </div>
+        <div class="text-center">
+            <div class="bg-[#f6f2fa] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg" style="box-shadow: 0 4px 16px 0 #3D006622;">
+                <span class="text-2xl font-bold text-[#3D0066]">3</span>
+            </div>
+            <h3 class="font-semibold mb-2 text-[#3D0066]">Enter Data</h3>
+            <p class="text-[#3D0066]/80 text-sm">Input vital signs and lab results</p>
+        </div>
+        <div class="text-center">
+            <div class="bg-[#f6f2fa] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg" style="box-shadow: 0 4px 16px 0 #3D006622;">
+                <span class="text-2xl font-bold text-[#3D0066]">4</span>
+            </div>
+            <h3 class="font-semibold mb-2 text-[#3D0066]">Get Results</h3>
+            <p class="text-[#3D0066]/80 text-sm">Receive AI-powered sepsis risk assessment</p>
+        </div>
+    </div>
+</div>
+{% endblock %} 
