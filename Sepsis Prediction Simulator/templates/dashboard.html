@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Sepsis Prediction Simulator{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-10">
+        <h1 class="text-4xl font-extrabold" style="color: #3D0066; letter-spacing: -1px; text-shadow: 0 4px 16px #A259FF33;">
+            Doctor Dashboard
+        </h1>
+        <p class="text-lg text-[#5F00B2] mt-2 bg-white inline-block px-6 py-2 rounded-xl shadow" style="box-shadow: 0 2px 8px 0 #A259FF22;">
+            Manage your patients and monitor sepsis risk assessments
+        </p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <!-- Total Patients -->
+        <div class="bg-gradient-to-br from-[#f6f2fa] via-white to-[#e9e3f7] rounded-3xl shadow-2xl border border-[#A259FF22] transform hover:-translate-y-1 transition duration-200" style="box-shadow: 0 8px 32px 0 #A259FF33;">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-[#3D0066]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-semibold text-[#5F00B2] truncate">Total Patients</dt>
+                            <dd class="text-2xl font-bold" style="color: #3D0066;">{{ patients|length }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Readings -->
+        <div class="bg-gradient-to-br from-[#e9e3f7] via-white to-[#f6f2fa] rounded-3xl shadow-2xl border border-[#A259FF22] transform hover:-translate-y-1 transition duration-200" style="box-shadow: 0 8px 32px 0 #A259FF33;">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-[#A259FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-semibold text-[#5F00B2] truncate">Total Readings</dt>
+                            <dd class="text-2xl font-bold" style="color: #3D0066;">
+                                {% set total_readings = namespace(value=0) %}
+                                {% for patient in patients %}
+                                    {% set total_readings.value = total_readings.value + patient.readings|length %}
+                                {% endfor %}
+                                {{ total_readings.value }}
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sepsis Alerts -->
+        <div class="bg-gradient-to-br from-[#fff] via-[#f6f2fa] to-[#A259FF11] rounded-3xl shadow-2xl border border-[#A259FF22] transform hover:-translate-y-1 transition duration-200" style="box-shadow: 0 8px 32px 0 #A259FF33;">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-[#FF3366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-semibold text-[#5F00B2] truncate">Sepsis Alerts</dt>
+                            <dd class="text-2xl font-bold" style="color: #3D0066;">
+                                {% set sepsis_count = namespace(value=0) %}
+                                {% for patient in patients %}
+                                    {% for reading in patient.readings %}
+                                        {% if reading.prediction %}
+                                            {% set sepsis_count.value = sepsis_count.value + 1 %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                                {{ sepsis_count.value }}
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="bg-gradient-to-br from-[#A259FF11] via-white to-[#f6f2fa] rounded-3xl shadow-2xl border border-[#A259FF22] transform hover:-translate-y-1 transition duration-200" style="box-shadow: 0 8px 32px 0 #A259FF33;">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-[#00B26A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-semibold text-[#5F00B2] truncate">Recent Activity</dt>
+                            <dd class="text-2xl font-bold" style="color: #3D0066;">
+                                {% set recent_count = namespace(value=0) %}
+                                {% for patient in patients %}
+                                    {% for reading in patient.readings[:1] %}
+                                        {% set recent_count.value = recent_count.value + 1 %}
+                                    {% endfor %}
+                                {% endfor %}
+                                {{ recent_count.value }}
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mb-10">
+        <a href="{{ url_for('new_patient') }}" 
+           class="inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-2xl shadow-lg text-white transition hover:opacity-90"
+           style="background: linear-gradient(90deg, #A259FF 0%, #3D0066 100%); box-shadow: 0 4px 16px 0 #A259FF44;">
+            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            Add New Patient
+        </a>
+    </div>
+
+    <!-- Patients List -->
+    <div class="bg-gradient-to-br from-[#f6f2fa] via-white to-[#e9e3f7] shadow-2xl border border-[#A259FF22] sm:rounded-3xl" style="box-shadow: 0 8px 32px 0 #A259FF33;">
+        <div class="px-6 py-7 sm:px-8">
+            <h3 class="text-2xl font-bold" style="color: #3D0066;">Your Patients</h3>
+            <p class="mt-1 max-w-2xl text-base text-[#5F00B2]">Manage patient information and view sepsis risk assessments</p>
+        </div>
+        
+        {% if patients and patients|length > 0 %}
+            <ul class="divide-y divide-[#A259FF22]">
+                {% for patient in patients %}
+                <li>
+                    <div class="px-6 py-6 sm:px-8">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="h-12 w-12 rounded-full bg-[#A259FF22] flex items-center justify-center shadow" style="box-shadow: 0 2px 8px 0 #A259FF33;">
+                                        <span class="text-[#3D0066] font-bold text-xl">
+                                            {{ patient.name[0]|default('?', true) }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="ml-5">
+                                    <div class="flex items-center">
+                                        <p class="text-lg font-semibold" style="color: #3D0066;">{{ patient.name }}</p>
+                                        <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#A259FF11] text-[#5F00B2] border border-[#A259FF22]">
+                                            {{ patient.age }} years, {{ patient.gender }}
+                                        </span>
+                                    </div>
+                                    <div class="mt-2 flex items-center text-sm text-[#5F00B2]">
+                                        <p>
+                                            Added 
+                                            {% if patient.created_at %}
+                                                {{ patient.created_at.strftime('%B %d, %Y') }}
+                                            {% else %}
+                                                Unknown date
+                                            {% endif %}
+                                        </p>
+                                        <span class="mx-2">•</span>
+                                        <p>{{ patient.readings|length }} readings</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                {% if patient.readings and patient.readings|length > 0 %}
+                                    {% set latest_reading = patient.readings[0] %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold shadow"
+                                        style="{% if latest_reading.prediction %}background: #FFEEF2; color: #FF3366;{% else %}background: #E6FFF2; color: #00B26A;{% endif %} box-shadow: 0 2px 8px 0 #A259FF22;">
+                                        {% if latest_reading.prediction %}Sepsis Risk{% else %}No Sepsis{% endif %}
+                                    </span>
+                                {% endif %}
+                                <a href="{{ url_for('patient_detail', patient_id=patient.id) }}" 
+                                   class="inline-flex items-center px-4 py-2 border border-[#A259FF44] shadow text-sm font-medium rounded-xl text-[#3D0066] bg-white hover:bg-[#f6f2fa] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A259FF] transition">
+                                    View Details
+                                </a>
+                                <a href="{{ url_for('new_reading', patient_id=patient.id) }}" 
+                                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-xl text-white transition hover:opacity-90"
+                                   style="background: linear-gradient(90deg, #A259FF 0%, #3D0066 100%); box-shadow: 0 2px 8px 0 #A259FF44;">
+                                    Add Reading
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="px-6 py-16 text-center">
+                <svg class="mx-auto h-14 w-14 text-[#A259FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                </svg>
+                <h3 class="mt-4 text-lg font-semibold" style="color: #3D0066;">No patients</h3>
+                <p class="mt-2 text-base text-[#5F00B2]">Get started by adding your first patient.</p>
+                <div class="mt-8">
+                    <a href="{{ url_for('new_patient') }}" 
+                       class="inline-flex items-center px-6 py-3 border border-transparent shadow-lg text-base font-semibold rounded-2xl text-white transition hover:opacity-90"
+                       style="background: linear-gradient(90deg, #A259FF 0%, #3D0066 100%); box-shadow: 0 4px 16px 0 #A259FF44;">
+                        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Add Patient
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
